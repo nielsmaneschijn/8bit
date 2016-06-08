@@ -113,7 +113,7 @@ public class MonoSynthFX extends Application implements Runnable {
 		bliep.setOnMousePressed(e -> osc1.setGain(1.0D));
 		label = new Label("push me!");
 		GridPane root = new GridPane();
-		root.setOnKeyPressed(e -> e.getCode());
+		root.setOnKeyPressed(e -> keyPressed(e));
 		root.add(label, 0, 0);
 		root.add(bliep, 0, 1);
 		Scene scene = new Scene(root, 300, 250);
