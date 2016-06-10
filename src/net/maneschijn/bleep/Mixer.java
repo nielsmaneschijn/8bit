@@ -3,7 +3,7 @@ public class Mixer extends Source{
 
 	private Source[] inputs;
 
-	Mixer(double gain, Source... inputs) {
+	Mixer(Control gain, Source... inputs) {
 		this.gain = gain;
 		this.inputs = inputs;
 	}

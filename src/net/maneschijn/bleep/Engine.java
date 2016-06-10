@@ -45,7 +45,7 @@ public class Engine extends Thread {
 
 		byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
 
-		Mixer mix = new Mixer(1.0D,  sources);
+		Mixer mix = new Mixer(new Control(1.0D),  sources);
 
 		while (running) {
 			for (int i = 0; i < EXTERNAL_BUFFER_SIZE; i++) {

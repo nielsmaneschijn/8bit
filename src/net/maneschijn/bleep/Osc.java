@@ -1,7 +1,7 @@
 package net.maneschijn.bleep;
 
 abstract public class Osc extends Source implements Mod {
-	protected double freq = 440;
+	protected Control freq;
 	protected Source lfo;
 	protected Source envelope;
 	private ZeroCrossingDetector zerocross;
@@ -9,7 +9,8 @@ abstract public class Osc extends Source implements Mod {
 	public Osc() {
 	}
 
-	public Osc(double freq, double gain, Source lfo, Source envelope) {
+	//let op geen pass by value!!
+	public Osc(Control freq, Control gain, Source lfo, Source envelope) {
 		this.freq = freq;
 		this.gain = gain;
 		this.lfo = lfo;
@@ -18,7 +19,7 @@ abstract public class Osc extends Source implements Mod {
 	}
 
 	public double getShiftedFreq() {
-		return (lfo != null) ? freq * Math.pow(2D, ((double) lfo.getSample()) / 128D) : freq;
+		return (lfo != null) ? freq.getValue() * Math.pow(2D, ((double) lfo.getSample()) / 128D) : freq.getValue();
 	}
 
 	protected void resetClock(byte curr) {
@@ -31,11 +32,11 @@ abstract public class Osc extends Source implements Mod {
 		return (envelope != null) ? (128D + envelope.getSample()) / 255D : 1.0D;
 	}
 
-	public final double getFreq() {
+	public final Control getFreq() {
 		return freq;
 	}
 
-	public final void setFreq(double freq) {
+	public final void setFreq(Control freq) {
 		this.freq = freq;
 	}
 

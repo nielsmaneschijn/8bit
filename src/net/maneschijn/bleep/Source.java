@@ -2,7 +2,7 @@ package net.maneschijn.bleep;
 
 public abstract class Source {
 
-	protected double gain = 1;
+	protected Control gain;
 	protected double clock = 0;
 	protected byte lastSample = 0;
 
@@ -10,11 +10,12 @@ public abstract class Source {
 		super();
 	}
 
-	public final double getGain() {
+	public final Control getGain() {
 		return gain;
 	}
 
-	public final void setGain(double gain) {
+	//pass by reference!
+	public final void setGain(Control gain) {
 		this.gain = gain;
 	}
 
