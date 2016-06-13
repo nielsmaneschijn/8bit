@@ -21,51 +21,55 @@ public class OscUI extends GridPane implements SourceUI {
 	ControlUI lfoGain = new ControlUI("LFO gain", 0, 1, 1);
 	ControlUI leslieFreq = new ControlUI("Leslie freq", 0, 20, 0.5);
 	ControlUI leslieGain = new ControlUI("Leslie gain", 0, 1, 0.5);
+	ControlUI detune = new ControlUI("Detune", -1, 1, 0);
 
 	public OscUI(String title, Control freq, Control gain) {
 		Label label = new Label(title);
 		this.add(label, 0, 0);
-		
+
 		init(freq, gain);
-		
+
 		addOscSelector(freq, gain);
-		
+
 		mixer = new MixUI(router);
 		this.add(lfoFreq, 1, 1);
 		this.add(lfoGain, 2, 1);
 		this.add(leslieFreq, 3, 1);
 		this.add(leslieGain, 4, 1);
-		this.add(mixer,  10, 1);
+		this.add(detune, 5, 1);
+		this.add(mixer, 10, 1);
 	}
 
 	private void addOscSelector(Control freq, Control gain) {
-		
+
 		GridPane buttons = new GridPane();
+		Label shape = new Label("Shape");
 		Button sine = new Button("~~~~");
 		Button square = new Button("_-_-");
 		Button saw = new Button("///");
 		Button triangle = new Button("\\/\\/\\");
-		
-		sine.setOnAction(e -> router.setSrc(new SineOsc(freq, gain, lfo, leslie.buffered())));
-		square.setOnAction(e -> router.setSrc(new SquareOsc(freq, gain, lfo, leslie.buffered())));
-		saw.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, lfo, leslie.buffered())));
-//		triangle.setOnAction(e -> router.setSrc(new TriangleOsc(freq, gain, lfo, lesley.buffered())));
-		triangle.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, null,null)));
-		
-		
+
+		sine.setOnAction(e -> router.setSrc(new SineOsc(freq, gain, lfo, leslie.buffered(),detune.getControl())));
+		square.setOnAction(e -> router.setSrc(new SquareOsc(freq, gain, lfo, leslie.buffered(),detune.getControl())));
+		saw.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, lfo, leslie.buffered(), detune.getControl())));
+		// triangle.setOnAction(e -> router.setSrc(new TriangleOsc(freq, gain,
+		// lfo, lesley.buffered(), detune.getControl())));
+		triangle.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, null, null,detune.getControl())));
+
+		buttons.add(shape, 0, 0);
 		buttons.add(sine, 0, 1);
 		buttons.add(square, 0, 2);
 		buttons.add(saw, 0, 3);
 		buttons.add(triangle, 0, 4);
-		this.add(buttons,  0, 1);
+		this.add(buttons, 0, 1);
 	}
 
 	private void init(Control freq, Control gain) {
-		leslie = new SineOsc(leslieFreq.getControl(), leslieGain.getControl(), null, null);
-		lfo = new SineOsc(lfoFreq.getControl(), lfoGain.getControl(), leslie, null);
-		router = new Router(new SineOsc(freq, gain, lfo, leslie.buffered()));
+		leslie = new SineOsc(leslieFreq.getControl(), leslieGain.getControl(), null, null, null);
+		lfo = new SineOsc(lfoFreq.getControl(), lfoGain.getControl(), leslie, null, null);
+		router = new Router(new SineOsc(freq, gain, lfo, leslie.buffered(),detune.getControl()));
 	}
-	
+
 	public Source getSource() {
 		return mixer.getSource();
 	}

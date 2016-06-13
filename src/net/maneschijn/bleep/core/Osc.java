@@ -4,22 +4,25 @@ abstract public class Osc extends Source implements Mod {
 	protected Control freq;
 	protected Source lfo;
 	protected Source envelope;
+	protected Control detune;
 	private ZeroCrossingDetector zerocross;
 
 	public Osc() {
 	}
 
-	//let op geen pass by value!!
-	public Osc(Control freq, Control gain, Source lfo, Source envelope) {
+	// let op geen pass by value!!
+	public Osc(Control freq, Control gain, Source lfo, Source envelope, Control detune) {
 		this.freq = freq;
 		this.gain = gain;
 		this.lfo = lfo;
 		this.envelope = envelope;
+		this.detune = detune;
 		this.zerocross = new ZeroCrossingDetector();
 	}
 
 	public double getShiftedFreq() {
-		return (lfo != null) ? freq.getValue() * Math.pow(2D, ((double) lfo.getSample()) / 128D) : freq.getValue();
+		return ((lfo != null) ? freq.getValue() * Math.pow(2D, ((double) lfo.getSample()) / 128D) : freq.getValue())
+				* (detune != null ? Math.pow(2D, detune.getValue()) : 1);
 	}
 
 	protected void resetClock(byte curr) {
