@@ -1,7 +1,7 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.ui;
 
-import static net.maneschijn.bleep.Util.SAMPLERATE;
-import static net.maneschijn.bleep.Util.getFreq;
+import static net.maneschijn.bleep.core.Util.SAMPLERATE;
+import static net.maneschijn.bleep.core.Util.getFreq;
 
 //import java.applet.Applet;
 //import java.awt.Graphics;
@@ -24,6 +24,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import net.maneschijn.bleep.core.Control;
+import net.maneschijn.bleep.core.Engine;
+import net.maneschijn.bleep.core.ZeroCrossingDetector;
 
 public class MonoSynthFX extends Application implements Runnable {
 
@@ -35,24 +38,22 @@ public class MonoSynthFX extends Application implements Runnable {
 	private ZeroCrossingDetector zerocross = new ZeroCrossingDetector();
 
 	private int transpose = 0;
-	
-	private Control gain = new Control(1.0D);
+
+	private Control oscGain = new Control(1.0D);
 
 	private Control freq = new Control(440D);
-	
+
 	// onderstaande verpakken in een new Patch=...
 	// patches moeten controls hebben waar noteon/off. mods en instellingen heen
 	// kunnen
 	// of een knopje square/sine?
-//	protected Source lesley = new SineOsc(0.5, 0.5, null, null);
-//	protected Source lfo = new SineOsc(4, 1, lesley, null);
-//	 protected Osc osc1 = new SineOsc(getFreq(69), 0, lfo, lesley.buffered());
-//	protected Osc osc1 = new SawOsc(getFreq(69), 0, null, null);
-//	protected Osc osc2 = new SawOsc(getFreq(71), 0, null, null);
-//	protected Source noise = new Noise();
+	// protected Source lesley = new SineOsc(0.5, 0.5, null, null);
+	// protected Source lfo = new SineOsc(4, 1, lesley, null);
+	// protected Osc osc1 = new SineOsc(getFreq(69), 0, lfo, lesley.buffered());
+	// protected Osc osc1 = new SawOsc(getFreq(69), 0, null, null);
+	// protected Osc osc2 = new SawOsc(getFreq(71), 0, null, null);
+	// protected Source noise = new Noise();
 	// einde patch
-
-
 
 	private HashMap<Integer, Integer> keymap = new HashMap<>();
 	private HashMap<KeyCode, Integer> keymap2 = new HashMap<>();
@@ -138,39 +139,32 @@ public class MonoSynthFX extends Application implements Runnable {
 		root.add(label, 0, 0);
 
 		drawKeys(root);
-		
-		drawVolumeSlider(root);
-		
-		OscUI osc1 = new OscUI("Osc1", freq, gain);
-		OscUI osc2 = new OscUI("Osc2", freq, gain);
+
+//		drawVolumeSlider(root);
+
+		OscUI osc1 = new OscUI("Osc1", freq, oscGain);
+		OscUI osc2 = new OscUI("Osc2", freq, oscGain);
+		ControlUI volume = new ControlUI("Volume");
 		
 		root.add(osc1, 0, 2);
 		root.add(osc2, 1, 2);
-		
-		Scene scene = new Scene(root, 300, 250);
+		root.add(volume, 15, 2);
+
+		Scene scene = new Scene(root, 600, 500);
 		stage.setTitle("Borkotron");
 		stage.setScene(scene);
 		stage.show();
 
-		//controller en engine aanslingeren
-//		Controller controller = new Controller(osc1.getOsc());
-		Engine eng = new Engine(osc1.getOsc(), osc2.getOsc());
+		// controller en engine aanslingeren
+		// Controller controller = new Controller(osc1.getOsc());
+		Engine eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
 		eng.start();
-//		controller.connectToMidiDevice();
+		// controller.connectToMidiDevice();
 	}
 
 	private void addKeyHandlers(GridPane pane) {
 		pane.setOnKeyPressed(e -> keyPressed(e));
 		pane.setOnKeyReleased(e -> noteOff(0));
-	}
-
-	private void drawVolumeSlider(GridPane pane) {
-		Slider volume = new Slider(0,1,1);
-		volume.setShowTickMarks(true);
-	    volume.setMajorTickUnit(10);
-		volume.setOrientation(Orientation.VERTICAL);
-		volume.valueProperty().addListener((observable, oldval, newval) -> { gain.setValue(newval.doubleValue()); } ); 
-		pane.add(volume, 5, 2);
 	}
 
 	private void drawKeys(GridPane pane) {
@@ -228,13 +222,14 @@ public class MonoSynthFX extends Application implements Runnable {
 	}
 
 	private void noteOn(int note) {
-		System.out.println("Note on: " + note + " " + gain.getValue());
-		freq.setValue(getFreq(transpose + note));	
+		System.out.println("Note on: " + note);
+		freq.setValue(getFreq(transpose + note));
+		oscGain.setValue(1D);
 	}
 
 	private void noteOff(int note) {
 		System.out.println("Note off: " + note);
-		gain.setValue(0D);
+		oscGain.setValue(0D);
 	}
 
 	// public void paint(Graphics g) {

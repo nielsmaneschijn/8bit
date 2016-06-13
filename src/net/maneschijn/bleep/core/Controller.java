@@ -1,4 +1,6 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
+
+import static net.maneschijn.bleep.core.Util.*;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
@@ -9,8 +11,6 @@ import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Synthesizer;
 import javax.sound.midi.Transmitter;
-
-import static net.maneschijn.bleep.Util.*;
 
 public class Controller implements Receiver {
 

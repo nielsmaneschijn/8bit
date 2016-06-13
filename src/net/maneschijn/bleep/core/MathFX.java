@@ -1,4 +1,4 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 // gejatte FX democode
 import javafx.application.Application;
 import javafx.event.ActionEvent;

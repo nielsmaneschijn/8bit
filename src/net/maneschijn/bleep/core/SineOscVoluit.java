@@ -1,4 +1,4 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 
 	public class SineOscVoluit  {
 		protected double freq=440D;

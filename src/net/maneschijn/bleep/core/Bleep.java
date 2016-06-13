@@ -1,5 +1,5 @@
-package net.maneschijn.bleep;
-import static net.maneschijn.bleep.Util.*;
+package net.maneschijn.bleep.core;
+import static net.maneschijn.bleep.core.Util.*;
 
 public class Bleep {
 

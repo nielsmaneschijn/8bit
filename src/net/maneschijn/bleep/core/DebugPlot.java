@@ -1,4 +1,4 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 
 import java.applet.Applet;
 import java.awt.Graphics;

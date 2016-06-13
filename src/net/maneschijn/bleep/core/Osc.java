@@ -1,4 +1,4 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 
 abstract public class Osc extends Source implements Mod {
 	protected Control freq;

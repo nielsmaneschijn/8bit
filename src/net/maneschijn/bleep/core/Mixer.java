@@ -1,9 +1,9 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 public class Mixer extends Source{
 
 	private Source[] inputs;
 
-	Mixer(Control gain, Source... inputs) {
+	public Mixer(Control gain, Source... inputs) {
 		this.gain = gain;
 		this.inputs = inputs;
 	}
@@ -13,6 +13,6 @@ public class Mixer extends Source{
 		for (Source input : inputs) {
 			total += input.getSample();
 		}
-		return (byte) (total/inputs.length);
+		return (byte) Math.max(-128,Math.min(127,total/inputs.length*gain.getValue()));
 	}
 }

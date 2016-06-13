@@ -1,4 +1,4 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;

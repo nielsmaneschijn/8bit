@@ -1,7 +1,7 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
 
-import static net.maneschijn.bleep.Util.SAMPLERATE;
-import static net.maneschijn.bleep.Util.getFreq;
+import static net.maneschijn.bleep.core.Util.SAMPLERATE;
+import static net.maneschijn.bleep.core.Util.getFreq;
 
 import java.applet.Applet;
 import java.awt.Graphics;

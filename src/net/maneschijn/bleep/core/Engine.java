@@ -1,19 +1,22 @@
-package net.maneschijn.bleep;
+package net.maneschijn.bleep.core;
+
+import static net.maneschijn.bleep.core.Util.*;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
-import static net.maneschijn.bleep.Util.*;
 
 public class Engine extends Thread {
 
 	private Source[] sources;
+	private Control gain;
 	private byte lastSample;
 
-	public Engine(Source... sources) {
+	public Engine(Control gain, Source... sources) {
 		this.sources = sources;
+		this.gain = gain;
 	}
 
 	public byte getLastSample() {
@@ -45,7 +48,7 @@ public class Engine extends Thread {
 
 		byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
 
-		Mixer mix = new Mixer(new Control(1.0D),  sources);
+		Mixer mix = new Mixer(gain,  sources);
 
 		while (running) {
 			for (int i = 0; i < EXTERNAL_BUFFER_SIZE; i++) {
