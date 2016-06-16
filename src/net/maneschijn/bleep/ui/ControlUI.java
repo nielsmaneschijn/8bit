@@ -8,13 +8,14 @@ import net.maneschijn.bleep.core.Control;
 
 public class ControlUI extends GridPane {
 
-	private Control control = new Control(1D);
+	private Control control = new Control(0D);
 
 	public ControlUI(String title) {
-		this(title, 0, 1, 1);
+		this(title, 0, 1, 0);
 	}
 
 	public ControlUI(String title, double min, double max, double value) {
+		control.setValue(value);
 		Label label = new Label(title);
 		Slider slider = new Slider(min, max, value);
 		slider.setShowTickMarks(true);

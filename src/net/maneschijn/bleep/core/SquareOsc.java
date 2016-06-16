@@ -9,7 +9,7 @@ public class SquareOsc extends Osc {
 	
 	@Override
 	public byte getSample() {
-		byte retval = (byte) (getEnvelope()*gain.getValue()*255*((int)((clock++/(SAMPLERATE/2/getShiftedFreq()))+1)%2)-128);
+		byte retval = (byte) (getEnvelope()*gain.getValue()*(255*((int)((clock++/(SAMPLERATE/2/getShiftedFreq()))+1)%2)-128));
 		resetClock(retval);
 		lastSample = retval;
 		return retval;

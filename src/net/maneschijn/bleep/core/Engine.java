@@ -13,6 +13,7 @@ public class Engine extends Thread {
 	private Source[] sources;
 	private Control gain;
 	private byte lastSample;
+	private byte[] abData;
 
 	public Engine(Control gain, Source... sources) {
 		this.sources = sources;
@@ -21,6 +22,10 @@ public class Engine extends Thread {
 
 	public byte getLastSample() {
 		return lastSample;
+	}
+
+	public byte[] getLastSamples() {
+		return abData;
 	}
 
 	boolean running = true;
@@ -46,9 +51,9 @@ public class Engine extends Thread {
 		line.start();
 		System.out.println(line.getBufferSize());
 
-		byte[] abData = new byte[EXTERNAL_BUFFER_SIZE];
+		abData = new byte[EXTERNAL_BUFFER_SIZE];
 
-		Mixer mix = new Mixer(gain,  sources);
+		Mixer mix = new Mixer(gain, sources);
 
 		while (running) {
 			for (int i = 0; i < EXTERNAL_BUFFER_SIZE; i++) {

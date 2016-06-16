@@ -10,9 +10,8 @@ public class SawOsc extends Osc {
 
 	@Override
 	public byte getSample() {
-//		byte retval = (byte) (getEnvelope() * gain * 255 * ((int) ((clock++ % (SAMPLERATE / 2/  getShiftedFreq())) + 1)) - 128);
-		byte retval = (byte) (getEnvelope() * gain.getValue() * 255 * ((int) ((clock++ % (SAMPLERATE / freq.getValue())) + 1)) - 128);
-		resetClock(retval);
+		byte retval = (byte) (getEnvelope() * gain.getValue() *  ((int) ((clock++ * getShiftedFreq() * 256 / SAMPLERATE ) % 256) - 128));
+		resetClock((byte) (retval-127));
 		lastSample = retval;
 		return retval;
 	}

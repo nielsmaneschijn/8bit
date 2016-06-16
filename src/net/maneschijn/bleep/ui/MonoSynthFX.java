@@ -1,6 +1,6 @@
 package net.maneschijn.bleep.ui;
 
-import static net.maneschijn.bleep.core.Util.SAMPLERATE;
+import static net.maneschijn.bleep.core.Util.EXTERNAL_BUFFER_SIZE;
 import static net.maneschijn.bleep.core.Util.getFreq;
 
 //import java.applet.Applet;
@@ -10,38 +10,46 @@ import static net.maneschijn.bleep.core.Util.getFreq;
 import java.util.HashMap;
 
 import javafx.application.Application;
+import javafx.concurrent.Task;
 import javafx.geometry.HPos;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Engine;
-import net.maneschijn.bleep.core.ZeroCrossingDetector;
 
 public class MonoSynthFX extends Application implements Runnable {
+
+	public MonoSynthFX() {
+		fillKeyMap();
+		fillKeyMap2();
+	}
 
 	private static final String ZWART = "-fx-background-color: #000000;";
 	private static final String WIT = "-fx-background-color: #FFFFFF;";
 
-	private static final long serialVersionUID = 1L;
+//	private static final long serialVersionUID = 1L;
 
-	private ZeroCrossingDetector zerocross = new ZeroCrossingDetector();
+//	private ZeroCrossingDetector zerocross = new ZeroCrossingDetector();
 
 	private int transpose = 0;
 
 	private Control oscGain = new Control(1.0D);
 
 	private Control freq = new Control(440D);
+
+	private Canvas canvas = new Canvas(500, 256);
+
+	private Engine eng;
 
 	// onderstaande verpakken in een new Patch=...
 	// patches moeten controls hebben waar noteon/off. mods en instellingen heen
@@ -128,6 +136,7 @@ public class MonoSynthFX extends Application implements Runnable {
 		pane.add(key, col, row);
 	}
 
+	@Override
 	public void start(Stage stage) {
 		// gave Java FX shit gebeurt hier!
 		label = new Label("push me!");
@@ -140,26 +149,42 @@ public class MonoSynthFX extends Application implements Runnable {
 
 		drawKeys(root);
 
-//		drawVolumeSlider(root);
-
 		OscUI osc1 = new OscUI("Osc1", freq, oscGain);
 		OscUI osc2 = new OscUI("Osc2", freq, oscGain);
-		ControlUI volume = new ControlUI("Volume");
-		
+
+		ControlUI volume = new ControlUI("Volume",0,1,1);
+		volume.setPadding(new Insets(15));
+		volume.setStyle("-fx-border-color: black");
+
+//		root.add(canvas, 1, 1);
 		root.add(osc1, 0, 2);
 		root.add(osc2, 1, 2);
 		root.add(volume, 15, 2);
 
-		Scene scene = new Scene(root, 600, 500);
-		stage.setTitle("Borkotron");
-		stage.setScene(scene);
-		stage.show();
 
 		// controller en engine aanslingeren
 		// Controller controller = new Controller(osc1.getOsc());
-		Engine eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
+		eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
 		eng.start();
 		// controller.connectToMidiDevice();
+
+		Scope scope = new Scope(eng);
+		root.add(scope,  1, 1);
+		
+		Scene scene = new Scene(root, 900, 500);
+		stage.setTitle("Borkotron");
+		stage.setScene(scene);
+		stage.show();
+//		Task<Void> scopeTask = new Task<Void>() {
+//			@Override
+//			public Void call() {
+//				scope();
+//				return null;
+//			}
+//		};
+//		
+//		new Thread(scopeTask).start();
+		
 	}
 
 	private void addKeyHandlers(GridPane pane) {
@@ -169,6 +194,8 @@ public class MonoSynthFX extends Application implements Runnable {
 
 	private void drawKeys(GridPane pane) {
 		GridPane keys = new GridPane();
+		keys.setPadding(new Insets(15));
+		keys.setStyle("-fx-border-color: black; -fx-background-color : #CCCCCC");
 		ColumnConstraints wit = new ColumnConstraints();
 		ColumnConstraints zwart = new ColumnConstraints();
 		zwart.setHalignment(HPos.RIGHT);
@@ -194,16 +221,6 @@ public class MonoSynthFX extends Application implements Runnable {
 		pane.add(keys, 0, 1);
 	}
 
-	public MonoSynthFX() {
-		fillKeyMap();
-		fillKeyMap2();
-
-		Thread visuals = new Thread(this);
-		visuals.start();
-
-		// keyboard(this);
-
-	}
 
 	public void keyPressed(KeyEvent e) {
 		KeyCode scancode = e.getCode();
@@ -232,25 +249,44 @@ public class MonoSynthFX extends Application implements Runnable {
 		oscGain.setValue(0D);
 	}
 
-	// public void paint(Graphics g) {
-	// // dit suckt ass, beter overpompen via een soort buffered stream
-	// int prevx = 0, prevy = 0;
-	//
-	// for (int x = 0; x < 500; x++) {
-	//
-	// int y = eng.getLastSample() + 128;
-	//
-	// g.drawLine(prevx, prevy, x, y);
-	// prevy = y;
-	// prevx = x;
-	//
-	// Thread.yield();
-	// ;
-	// }
-
 	@Override
 	public void run() {
 
+	}
+
+	private void scope() {
+		GraphicsContext gc = canvas.getGraphicsContext2D();
+		gc.setStroke(Color.BLACK);
+		gc.setFill(Color.BLUE);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		while (true) {
+
+			if (eng != null) {
+				byte[] samples = eng.getLastSamples();
+				if (samples != null) {
+					gc.clearRect(0, 0, 500, 256);
+					gc.beginPath();
+					gc.moveTo(0, samples[0]+128);
+					for (int x = 1; x < EXTERNAL_BUFFER_SIZE; x++) {
+
+						gc.lineTo((double) x, (double) samples[x]+128);
+//						Thread.yield();
+					}
+					gc.stroke();
+				}
+			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	public static void main(String[] args) {

@@ -1,8 +1,12 @@
 package net.maneschijn.bleep.ui;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.StrokeType;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Router;
 import net.maneschijn.bleep.core.SawOsc;
@@ -18,12 +22,14 @@ public class OscUI extends GridPane implements SourceUI {
 	private MixUI mixer;
 
 	ControlUI lfoFreq = new ControlUI("LFO freq", 0, 30, 4);
-	ControlUI lfoGain = new ControlUI("LFO gain", 0, 1, 1);
+	ControlUI lfoGain = new ControlUI("LFO gain", 0, 1, 0);
 	ControlUI leslieFreq = new ControlUI("Leslie freq", 0, 20, 0.5);
-	ControlUI leslieGain = new ControlUI("Leslie gain", 0, 1, 0.5);
+	ControlUI leslieGain = new ControlUI("Leslie gain", 0, 1, 0);
 	ControlUI detune = new ControlUI("Detune", -1, 1, 0);
 
 	public OscUI(String title, Control freq, Control gain) {
+		this.setPadding(new Insets(15));
+		this.setStyle("-fx-border-color: black");
 		Label label = new Label(title);
 		this.add(label, 0, 0);
 

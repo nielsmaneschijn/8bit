@@ -3,7 +3,7 @@ package net.maneschijn.bleep.core;
 public class Util {
 	
 	public static final float SAMPLERATE = 44100F; 
-	public static final int EXTERNAL_BUFFER_SIZE = 1;
+	public static final int EXTERNAL_BUFFER_SIZE = 128;
 	public static final int BUFFER_SIZE = 4096;
 
 	public static double getFreq(int midinote) {
