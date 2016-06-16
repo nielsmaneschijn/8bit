@@ -3,10 +3,7 @@ package net.maneschijn.bleep.ui;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.StrokeType;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Router;
 import net.maneschijn.bleep.core.SawOsc;
@@ -14,6 +11,7 @@ import net.maneschijn.bleep.core.SineOsc;
 import net.maneschijn.bleep.core.Source;
 import net.maneschijn.bleep.core.SourceUI;
 import net.maneschijn.bleep.core.SquareOsc;
+import net.maneschijn.bleep.core.TriangleOsc;
 
 public class OscUI extends GridPane implements SourceUI {
 	private Source leslie;
@@ -58,9 +56,7 @@ public class OscUI extends GridPane implements SourceUI {
 		sine.setOnAction(e -> router.setSrc(new SineOsc(freq, gain, lfo, leslie.buffered(),detune.getControl())));
 		square.setOnAction(e -> router.setSrc(new SquareOsc(freq, gain, lfo, leslie.buffered(),detune.getControl())));
 		saw.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, lfo, leslie.buffered(), detune.getControl())));
-		// triangle.setOnAction(e -> router.setSrc(new TriangleOsc(freq, gain,
-		// lfo, lesley.buffered(), detune.getControl())));
-		triangle.setOnAction(e -> router.setSrc(new SawOsc(freq, gain, null, null,detune.getControl())));
+		triangle.setOnAction(e -> router.setSrc(new TriangleOsc(freq, gain, lfo, leslie.buffered(), detune.getControl())));
 
 		buttons.add(shape, 0, 0);
 		buttons.add(sine, 0, 1);
