@@ -5,7 +5,7 @@ abstract public class Osc extends Source implements Mod {
 	protected Source lfo;
 	protected Source envelope;
 	protected Control detune;
-	private ZeroCrossingDetector zerocross;
+	protected ZeroCrossingDetector zerocross;
 
 	public Osc() {
 	}
