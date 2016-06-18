@@ -13,7 +13,7 @@ public class ZeroCrossingDetector {
 
 	public boolean isZeroCrossed(byte curr) {
 		boolean retval = (prev < zeroPoint) && (curr >= zeroPoint);
-		if (retval){System.out.println(""+prev+" "+curr);}
+//		if (retval){System.out.println(""+prev+" "+curr);}
 		prev = curr;
 		return retval;
 	}

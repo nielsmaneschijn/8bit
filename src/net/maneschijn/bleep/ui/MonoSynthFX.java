@@ -10,7 +10,6 @@ import static net.maneschijn.bleep.core.Util.getFreq;
 import java.util.HashMap;
 
 import javafx.application.Application;
-import javafx.concurrent.Task;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -25,6 +24,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.maneschijn.bleep.core.Control;
+import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Engine;
 
 public class MonoSynthFX extends Application implements Runnable {
@@ -163,10 +163,10 @@ public class MonoSynthFX extends Application implements Runnable {
 
 
 		// controller en engine aanslingeren
-		// Controller controller = new Controller(osc1.getOsc());
+		Controller controller = new Controller(freq, oscGain);
 		eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
 		eng.start();
-		// controller.connectToMidiDevice();
+		controller.connectToMidiDevice();
 
 		Scope scope = new Scope(eng);
 		root.add(scope,  1, 1);

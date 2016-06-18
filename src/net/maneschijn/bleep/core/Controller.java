@@ -1,6 +1,6 @@
 package net.maneschijn.bleep.core;
 
-import static net.maneschijn.bleep.core.Util.*;
+import static net.maneschijn.bleep.core.Util.getFreq;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
@@ -14,12 +14,14 @@ import javax.sound.midi.Transmitter;
 
 public class Controller implements Receiver {
 
-	private Osc osc;
+	private Control freq;
+	private Control gain;
 
-	Controller(Osc osc) {
-		this.osc = osc;
+	public Controller(Control freq, Control gain){
+		this.freq=freq;
+		this.gain=gain;
 	}
-
+	
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
 
@@ -28,12 +30,12 @@ public class Controller implements Receiver {
 			System.out.println("note on");
 			System.out.println(((ShortMessage) message).getData1());
 			System.out.println(((ShortMessage) message).getData2());
-			osc.setFreq(getFreq(((ShortMessage) message).getData1()));
-			osc.setGain((((ShortMessage) message).getData2()) / 128D);
+			freq.setValue(getFreq(((ShortMessage) message).getData1()));
+			gain.setValue((((ShortMessage) message).getData2()) / 128D);
 			break;
 		case 128:
 			System.out.println("note off");
-			osc.setGain(0);
+			gain.setValue(0);
 			break;
 		case 176:
 			System.out.println("mod");
@@ -57,7 +59,7 @@ public class Controller implements Receiver {
 
 	}
 
-	void connectToMidiDevice() {
+	public void connectToMidiDevice() {
 		Transmitter t;
 
 		MidiDevice device = null;

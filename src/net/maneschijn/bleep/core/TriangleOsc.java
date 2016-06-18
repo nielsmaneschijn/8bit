@@ -18,9 +18,9 @@ public class TriangleOsc extends Osc {
 //								* ((4 *(clock * getShiftedFreq() * 256 / SAMPLERATE) % 1024) - 512)))
 //						- 128));
 		byte retval = (byte) (getEnvelope() * gain.getValue()
-				* (byte) ((int) ((2*clock++ * getShiftedFreq() * 256 / SAMPLERATE) 
+				* (byte) ((int) ((2*++clock * getShiftedFreq() * 256 / SAMPLERATE) 
 						- (((int) (clock / (SAMPLERATE / 2 / getShiftedFreq())+0.5) % 2)
-								* ((4 *(clock * getShiftedFreq() * 256 / SAMPLERATE) )-256 )))
+								* ((4 *(clock * getShiftedFreq() * 256 / SAMPLERATE) )-255 )))
 						));
 		resetClock((byte) (retval-0));//why god why
 		lastSample = retval;
