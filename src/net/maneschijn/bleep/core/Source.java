@@ -3,7 +3,7 @@ package net.maneschijn.bleep.core;
 public abstract class Source {
 
 	protected Control gain;
-	protected double clock = 0;
+	protected long clock = 0;
 	protected byte lastSample = 0;
 
 	public Source() {
