@@ -8,6 +8,7 @@ public class ZeroCrossingDetector {
 		this(0);
 	}
 	public ZeroCrossingDetector(int zeroPoint) {
+		//als je dit gebruikt ben je eng bezig!
 		this.zeroPoint = zeroPoint;
 	}
 

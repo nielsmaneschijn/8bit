@@ -13,10 +13,10 @@ public class DebugPlot extends Applet {
 
 	@Override
 	public void paint(Graphics g) {
-		Osc lfo2 = new SineOsc(0.1, 1, null, null);
-		Osc lfo = new SineOsc(40, 1, lfo2, null);
+		Osc lfo2 = new SineOsc(new Control(0.1), new Control(1), null, null,null);
+		Osc lfo = new SineOsc(new Control(40), new Control(1), lfo2, null,null);
 //		Osc osc = new SquareOsc(440, 1, lfo, null);
-		Osc osc = new SawOsc(440, 1, lfo, null);
+		Osc osc = new TriangleOsc(new Control(440), new Control(1), lfo, null,null);
 
 		Source noise = new Noise();
 		int oldy = 0;

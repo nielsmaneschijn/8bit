@@ -74,13 +74,13 @@ public class Controller implements Receiver {
 
 				try {
 					device.open();
-					t = device.getTransmitter();
 					System.out.println("device: " + device);
 					System.out.println(i);
 					System.out.println("info: " + infos[i].getName() + ":");
 					System.out.println("info: " + infos[i].getVendor() + ":");
 					System.out.println("info: " + infos[i].getDescription() + ":");
 					System.out.println("info: " + infos[i].getVersion() + ":");
+					t = device.getTransmitter();
 					t.setReceiver(this);
 				} catch (MidiUnavailableException e) {
 					e.printStackTrace();
