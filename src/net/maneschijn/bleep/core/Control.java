@@ -2,7 +2,7 @@ package net.maneschijn.bleep.core;
 
 public class Control {
 
-	private double value;
+	private double value; //doorgaans tussen 0 en 1
 
 	public double getValue() {
 		return value;

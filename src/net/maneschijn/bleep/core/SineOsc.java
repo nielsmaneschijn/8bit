@@ -4,8 +4,8 @@ import static net.maneschijn.bleep.core.Util.*;
 
 public class SineOsc extends Osc {
 
-	public SineOsc(Control freq, Control gain, Source lfo, Source envelope, Control detune) {
-		super(freq, gain, lfo, envelope, detune);
+	public SineOsc(Controller controller, Source lfo, Source envelope, Control detune) {
+		super(controller, lfo, envelope, detune);
 	}
 
 	@Override

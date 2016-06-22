@@ -30,6 +30,7 @@ public class Engine extends Thread {
 
 	boolean running = true;
 
+	@Override
 	public void run() {
 		this.setPriority(10);
 		AudioFormat audioFormat = new AudioFormat(SAMPLERATE, 8, 1, true, false);

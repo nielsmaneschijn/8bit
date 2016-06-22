@@ -7,13 +7,10 @@ abstract public class Osc extends Source implements Mod {
 	protected Control detune;
 	protected ZeroCrossingDetector zerocross;
 
-	public Osc() {
-	}
-
 	// let op geen pass by value!!
-	public Osc(Control freq, Control gain, Source lfo, Source envelope, Control detune) {
-		this.freq = freq;
-		this.gain = gain;
+	public Osc(Controller controller, Source lfo, Source envelope, Control detune) {
+		super(controller);
+		this.freq = controller.getFreqControl();
 		this.lfo = lfo;
 		this.envelope = envelope;
 		this.detune = detune;
@@ -43,4 +40,22 @@ abstract public class Osc extends Source implements Mod {
 		this.freq = freq;
 	}
 
+	//ADSR subscribeert zelf dus niet meer nodig?
+//	@Override
+//	public void noteOn() {
+////		super.noteOn();
+//		System.out.println("note on " + this);
+////		if (envelope != null) {envelope.noteOn();}
+//		//lfo niet
+//	}
+//
+//	@Override
+//	public void noteOff() {
+////		super.noteOff();
+//		System.out.println("note off " + this);
+////		if (envelope != null) {envelope.noteOff();}
+//		//lfo niet
+//	}
+
+	
 }

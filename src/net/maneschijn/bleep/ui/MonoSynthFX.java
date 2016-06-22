@@ -31,7 +31,7 @@ public class MonoSynthFX extends Application implements Runnable {
 
 	public MonoSynthFX() {
 		fillKeyMap();
-		fillKeyMap2();
+		fillKeyMap2(); 
 	}
 
 	private static final String ZWART = "-fx-background-color: #000000;";
@@ -44,10 +44,8 @@ public class MonoSynthFX extends Application implements Runnable {
 	private int transpose = 0;
 
 	private Control oscGain = new Control(1.0D);
-
 	private Control freq = new Control(440D);
-
-	private Canvas canvas = new Canvas(500, 256);
+	private Controller controller = new Controller(freq, oscGain);
 
 	private Engine eng;
 
@@ -149,8 +147,10 @@ public class MonoSynthFX extends Application implements Runnable {
 
 		drawKeys(root);
 
-		OscUI osc1 = new OscUI("Osc1", freq, oscGain);
-		OscUI osc2 = new OscUI("Osc2", freq, oscGain);
+		OscUI osc1 = new OscUI("Osc1", controller);
+		OscUI osc2 = new OscUI("Osc2", controller);
+//		OscUI osc1 = new OscUI("Osc1", freq, oscGain);
+//		OscUI osc2 = new OscUI("Osc2", freq, oscGain);
 
 		ControlUI volume = new ControlUI("Volume",0,1,1);
 		volume.setPadding(new Insets(15));
@@ -163,7 +163,6 @@ public class MonoSynthFX extends Application implements Runnable {
 
 
 		// controller en engine aanslingeren
-		Controller controller = new Controller(freq, oscGain);
 		eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
 		eng.start();
 		controller.connectToMidiDevice();
@@ -242,11 +241,13 @@ public class MonoSynthFX extends Application implements Runnable {
 		System.out.println("Note on: " + note);
 		freq.setValue(getFreq(transpose + note));
 		oscGain.setValue(1D);
+		controller.noteOn();
 	}
 
 	private void noteOff(int note) {
 		System.out.println("Note off: " + note);
-		oscGain.setValue(0D);
+//		oscGain.setValue(0D);
+		controller.noteOff();
 	}
 
 	@Override
@@ -254,40 +255,7 @@ public class MonoSynthFX extends Application implements Runnable {
 
 	}
 
-	private void scope() {
-		GraphicsContext gc = canvas.getGraphicsContext2D();
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLUE);
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 
-		while (true) {
-
-			if (eng != null) {
-				byte[] samples = eng.getLastSamples();
-				if (samples != null) {
-					gc.clearRect(0, 0, 500, 256);
-					gc.beginPath();
-					gc.moveTo(0, samples[0]+128);
-					for (int x = 1; x < EXTERNAL_BUFFER_SIZE; x++) {
-
-						gc.lineTo((double) x, (double) samples[x]+128);
-//						Thread.yield();
-					}
-					gc.stroke();
-				}
-			}
-			try {
-				Thread.sleep(10);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		}
-	}
 
 	public static void main(String[] args) {
 		launch(args);

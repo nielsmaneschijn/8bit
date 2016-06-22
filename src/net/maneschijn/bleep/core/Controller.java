@@ -2,6 +2,9 @@ package net.maneschijn.bleep.core;
 
 import static net.maneschijn.bleep.core.Util.getFreq;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
@@ -16,12 +19,30 @@ public class Controller implements Receiver {
 
 	private Control freq;
 	private Control gain;
+	private List<Source> subscribers = new ArrayList<Source>();
 
-	public Controller(Control freq, Control gain){
-		this.freq=freq;
-		this.gain=gain;
+	public Controller(Control freq, Control gain) {
+		this.freq = freq;
+		this.gain = gain;
 	}
-	
+
+	public void subscribe(Source subscriber) {
+		subscribers.add(subscriber);
+		System.out.println("nieuwe subscriber! " + subscriber);
+	}
+
+	public void unsubscribe(Source subscriber) {
+		subscribers.remove(subscriber);
+	}
+
+	public Control getFreqControl() {
+		return freq;
+	}
+
+	public Control getGainControl() {
+		return gain;
+	}
+
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
 
@@ -30,12 +51,11 @@ public class Controller implements Receiver {
 			System.out.println("note on");
 			System.out.println(((ShortMessage) message).getData1());
 			System.out.println(((ShortMessage) message).getData2());
-			freq.setValue(getFreq(((ShortMessage) message).getData1()));
-			gain.setValue((((ShortMessage) message).getData2()) / 128D);
+			noteOn(message);
 			break;
 		case 128:
 			System.out.println("note off");
-			gain.setValue(0);
+			noteOff();
 			break;
 		case 176:
 			System.out.println("mod");
@@ -52,6 +72,27 @@ public class Controller implements Receiver {
 		default:
 			System.out.println("wut?");
 		}
+	}
+
+	public void noteOff() {
+		gain.setValue(0);
+		for (Source subscriber : subscribers) {
+			System.out.println("subscriber " + subscriber + " note off");
+			subscriber.noteOff();
+		}
+	}
+
+	public void noteOn() {
+		for (Source subscriber : subscribers) {
+			System.out.println("subscriber " + subscriber + " note on");
+			subscriber.noteOn();
+		}
+	}
+
+	public void noteOn(MidiMessage message) {
+		freq.setValue(getFreq(((ShortMessage) message).getData1()));
+		gain.setValue((((ShortMessage) message).getData2()) / 128D);
+		noteOn();
 	}
 
 	@Override

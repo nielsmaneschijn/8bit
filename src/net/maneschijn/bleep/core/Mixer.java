@@ -8,6 +8,7 @@ public class Mixer extends Source{
 		this.inputs = inputs;
 	}
 
+	@Override
 	public byte getSample() {
 		int total = 0;
 		for (Source input : inputs) {

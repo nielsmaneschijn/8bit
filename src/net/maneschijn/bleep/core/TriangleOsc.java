@@ -4,8 +4,8 @@ import static net.maneschijn.bleep.core.Util.*;
 
 public class TriangleOsc extends Osc {
 
-	public TriangleOsc(Control freq, Control gain, Source lfo, Source envelope, Control detune) {
-		super(freq, gain, lfo, envelope, detune);
+	public TriangleOsc(Controller controller, Source lfo, Source envelope, Control detune) {
+		super(controller, lfo, envelope, detune);
 //		zerocross = new ZeroCrossingDetector(-127);
 	}
 
