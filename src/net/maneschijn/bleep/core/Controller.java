@@ -75,7 +75,7 @@ public class Controller implements Receiver {
 	}
 
 	public void noteOff() {
-		gain.setValue(0);
+//		gain.setValue(0);
 		for (Source subscriber : subscribers) {
 			System.out.println("subscriber " + subscriber + " note off");
 			subscriber.noteOff();

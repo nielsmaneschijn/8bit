@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import net.maneschijn.bleep.core.ADSR;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Controller;
+import net.maneschijn.bleep.core.Multiplier;
 import net.maneschijn.bleep.core.Router;
 import net.maneschijn.bleep.core.SawOsc;
 import net.maneschijn.bleep.core.SineOsc;
@@ -30,23 +31,28 @@ public class OscUI extends GridPane implements SourceUI {
 	Controller lfoController = new Controller(lfoFreq.getControl(), lfoGain.getControl());
 	Controller leslieController = new Controller(leslieFreq.getControl(), leslieGain.getControl());
 	
+	ADSRUI adsr;
+	
 	public OscUI(String title, Controller controller) {
 		this.setPadding(new Insets(15));
 		this.setStyle("-fx-border-color: black");
 		Label label = new Label(title);
 		this.add(label, 0, 0);
 
-		init(controller);
-
 		addOscSelector(controller);
 
+		adsr = new ADSRUI(controller);
+		init(controller);
 		mixer = new MixUI(router);
+		
 		this.add(lfoFreq, 1, 1);
 		this.add(lfoGain, 2, 1);
 		this.add(leslieFreq, 3, 1);
 		this.add(leslieGain, 4, 1);
 		this.add(detune, 5, 1);
+		this.add(adsr, 6,1);
 		this.add(mixer, 10, 1);
+
 	}
 
 	private void addOscSelector(Controller controller) {
@@ -58,10 +64,10 @@ public class OscUI extends GridPane implements SourceUI {
 		Button saw = new Button("///");
 		Button triangle = new Button("\\/\\/\\");
 
-		sine.setOnAction(e -> router.setSrc(new SineOsc(controller, lfo, new ADSR(new Control(0.5),new Control(0.5),new Control(0.5),new Control(0.5), controller),detune.getControl())));
-		square.setOnAction(e -> router.setSrc(new SquareOsc(controller, lfo, leslie.buffered(),detune.getControl())));
-		saw.setOnAction(e -> router.setSrc(new SawOsc(controller, lfo, leslie.buffered(), detune.getControl())));
-		triangle.setOnAction(e -> router.setSrc(new TriangleOsc(controller, lfo, leslie.buffered(), detune.getControl())));
+		sine.setOnAction(e -> router.setSrc(new SineOsc(controller, lfo, new Multiplier(leslie.buffered(), adsr.getSource()),detune.getControl())));
+		square.setOnAction(e -> router.setSrc(new SquareOsc(controller, lfo, new Multiplier(leslie.buffered(), adsr.getSource()),detune.getControl())));
+		saw.setOnAction(e -> router.setSrc(new SawOsc(controller, lfo, new Multiplier(leslie.buffered(), adsr.getSource()), detune.getControl())));
+		triangle.setOnAction(e -> router.setSrc(new TriangleOsc(controller, lfo, new Multiplier(leslie.buffered(), adsr.getSource()), detune.getControl())));
 
 		buttons.add(shape, 0, 0);
 		buttons.add(sine, 0, 1);
@@ -74,7 +80,7 @@ public class OscUI extends GridPane implements SourceUI {
 	private void init(Controller controller) {
 		leslie = new SineOsc(leslieController, null, null, null);
 		lfo = new SineOsc(lfoController, leslie, null, null);
-		router = new Router(new SineOsc(controller, lfo, leslie.buffered(),detune.getControl()));
+		router = new Router(new SineOsc(controller, lfo,new Multiplier(leslie.buffered(), adsr.getSource()),detune.getControl()));
 	}
 
 	public Source getSource() {
