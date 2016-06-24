@@ -4,8 +4,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import net.maneschijn.bleep.core.ADSR;
-import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Multiplier;
 import net.maneschijn.bleep.core.Router;
@@ -21,6 +19,7 @@ public class OscUI extends GridPane implements SourceUI {
 	private Source lfo;
 	private Router router;
 	private MixUI mixer;
+	private BitcrusherUI bitcrusher;
 
 	ControlUI lfoFreq = new ControlUI("LFO freq", 0, 30, 4);
 	ControlUI lfoGain = new ControlUI("LFO gain", 0, 1, 0);
@@ -44,13 +43,14 @@ public class OscUI extends GridPane implements SourceUI {
 		adsr = new ADSRUI(controller);
 		init(controller);
 		mixer = new MixUI(router);
-		
+		bitcrusher = new BitcrusherUI(mixer.getSource());
 		this.add(lfoFreq, 1, 1);
 		this.add(lfoGain, 2, 1);
 		this.add(leslieFreq, 3, 1);
 		this.add(leslieGain, 4, 1);
 		this.add(detune, 5, 1);
-		this.add(adsr, 6,1);
+		this.add(bitcrusher, 6, 1);
+		this.add(adsr, 7,1);
 		this.add(mixer, 10, 1);
 
 	}
@@ -84,6 +84,6 @@ public class OscUI extends GridPane implements SourceUI {
 	}
 
 	public Source getSource() {
-		return mixer.getSource();
+		return bitcrusher.getSource();
 	}
 }

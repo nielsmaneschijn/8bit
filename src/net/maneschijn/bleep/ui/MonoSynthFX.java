@@ -224,9 +224,9 @@ public class MonoSynthFX extends Application implements Runnable {
 	public void keyPressed(KeyEvent e) {
 		KeyCode scancode = e.getCode();
 		System.out.println("key pressed: " + scancode);
-		if (scancode == KeyCode.PLUS) {
+		if (scancode == KeyCode.EQUALS || scancode == KeyCode.ADD) {
 			transposeUp();
-		} else if (scancode == KeyCode.MINUS) {
+		} else if (scancode == KeyCode.MINUS || scancode == KeyCode.SUBTRACT) {
 			transposeDown();
 		} else {
 			int note = getNote(scancode);
