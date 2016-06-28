@@ -11,7 +11,7 @@ public class BitcrusherUI extends GridPane implements SourceUI {
 
 	public BitcrusherUI( Source source) {
 		
-		ControlUI bits = new ControlUI("Bits", 1, 8, 4);
+		ControlUI bits = new ControlUI("Bits", 1, 8, 8);
 		bitcrusher = new Bitcrusher(bits.getControl(), source);
 
 		this.add(bits,0,0);

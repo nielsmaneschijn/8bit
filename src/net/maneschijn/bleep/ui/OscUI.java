@@ -34,7 +34,7 @@ public class OscUI extends GridPane implements SourceUI {
 	
 	public OscUI(String title, Controller controller) {
 		this.setPadding(new Insets(15));
-		this.setStyle("-fx-border-color: black");
+		this.setStyle("-fx-border-color: lightgray");
 		Label label = new Label(title);
 		this.add(label, 0, 0);
 
@@ -44,6 +44,8 @@ public class OscUI extends GridPane implements SourceUI {
 		init(controller);
 		mixer = new MixUI(router);
 		bitcrusher = new BitcrusherUI(mixer.getSource());
+		VU vu = new VU(bitcrusher.getSource(), false);
+		this.add(vu, 0, 2);
 		this.add(lfoFreq, 1, 1);
 		this.add(lfoGain, 2, 1);
 		this.add(leslieFreq, 3, 1);

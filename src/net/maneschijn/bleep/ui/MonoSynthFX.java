@@ -1,6 +1,5 @@
 package net.maneschijn.bleep.ui;
 
-import static net.maneschijn.bleep.core.Util.EXTERNAL_BUFFER_SIZE;
 import static net.maneschijn.bleep.core.Util.getFreq;
 
 //import java.applet.Applet;
@@ -13,19 +12,18 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Engine;
+import net.maneschijn.bleep.core.Mixer;
+import net.maneschijn.bleep.core.Source;
 
 public class MonoSynthFX extends Application implements Runnable {
 
@@ -36,10 +34,6 @@ public class MonoSynthFX extends Application implements Runnable {
 
 	private static final String ZWART = "-fx-background-color: #000000;";
 	private static final String WIT = "-fx-background-color: #FFFFFF;";
-
-//	private static final long serialVersionUID = 1L;
-
-//	private ZeroCrossingDetector zerocross = new ZeroCrossingDetector();
 
 	private int transpose = 0;
 
@@ -124,6 +118,7 @@ public class MonoSynthFX extends Application implements Runnable {
 	}
 
 	Label label;
+	private boolean noteOn;
 
 	private void addKey(int note, GridPane pane, int col, int row, String style) {
 		Button key = new Button();
@@ -149,40 +144,35 @@ public class MonoSynthFX extends Application implements Runnable {
 
 		OscUI osc1 = new OscUI("Osc1", controller);
 		OscUI osc2 = new OscUI("Osc2", controller);
-//		OscUI osc1 = new OscUI("Osc1", freq, oscGain);
-//		OscUI osc2 = new OscUI("Osc2", freq, oscGain);
 
 		ControlUI volume = new ControlUI("Volume",0,1,1);
 		volume.setPadding(new Insets(15));
-		volume.setStyle("-fx-border-color: black");
+		volume.setStyle("-fx-border-color: lightgray");
 
-//		root.add(canvas, 1, 1);
-		root.add(osc1, 0, 2);
-		root.add(osc2, 1, 2);
-		root.add(volume, 15, 2);
-
+		Mixer mixer = new Mixer(new Control(1),osc1.getSource(), osc2.getSource());
+		OverdriveUI overdrive = new OverdriveUI(mixer);
 
 		// controller en engine aanslingeren
-		eng = new Engine(volume.getControl(), osc1.getSource(), osc2.getSource());
+		eng = new Engine(volume.getControl(), overdrive.getSource() );
 		eng.start();
 		controller.connectToMidiDevice();
+		
+		VU vu = new VU(eng,true);
+		root.add(osc1, 0, 2);
+		root.add(osc2, 1, 2);
+		root.add(overdrive, 2, 2);
+		root.add(volume, 15, 2);
+		volume.add(vu, 1, 1);
+
+
 
 		Scope scope = new Scope(eng);
 		root.add(scope,  1, 1);
 		
-		Scene scene = new Scene(root, 900, 500);
+		Scene scene = new Scene(root, 1500, 500);
 		stage.setTitle("Borkotron");
 		stage.setScene(scene);
 		stage.show();
-//		Task<Void> scopeTask = new Task<Void>() {
-//			@Override
-//			public Void call() {
-//				scope();
-//				return null;
-//			}
-//		};
-//		
-//		new Thread(scopeTask).start();
 		
 	}
 
@@ -230,7 +220,7 @@ public class MonoSynthFX extends Application implements Runnable {
 			transposeDown();
 		} else {
 			int note = getNote(scancode);
-			if (note != 0) {
+			if (note != 0 && !noteOn) {
 				// note on/off versturen naar controller iets
 				noteOn(note);
 			}
@@ -238,6 +228,7 @@ public class MonoSynthFX extends Application implements Runnable {
 	}
 
 	private void noteOn(int note) {
+		noteOn = true;
 		System.out.println("Note on: " + note);
 		freq.setValue(getFreq(transpose + note));
 		oscGain.setValue(1D);
@@ -245,6 +236,7 @@ public class MonoSynthFX extends Application implements Runnable {
 	}
 
 	private void noteOff(int note) {
+		noteOn = false;
 		System.out.println("Note off: " + note);
 //		oscGain.setValue(0D);
 		controller.noteOff();

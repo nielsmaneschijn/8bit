@@ -1,5 +1,7 @@
 package net.maneschijn.bleep.core;
 
-interface Mod  {
+interface Mod {
+
+	public byte getSample();
 
 }

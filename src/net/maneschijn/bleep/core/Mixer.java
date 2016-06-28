@@ -14,6 +14,7 @@ public class Mixer extends Source{
 		for (Source input : inputs) {
 			total += input.getSample();
 		}
-		return (byte) Math.max(-128,Math.min(127,total/inputs.length*gain.getValue()));
+		lastSample = (byte) Math.max(-128,Math.min(127,total/inputs.length*gain.getValue()));
+		return lastSample;
 	}
 }

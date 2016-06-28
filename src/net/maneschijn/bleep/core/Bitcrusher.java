@@ -11,7 +11,8 @@ public class Bitcrusher extends Filter {
 
 	@Override
 	public byte getSample() {
-		return (byte) ((source.getSample()>>(int)(8-bits.getValue()))<<(int)(8-bits.getValue()));
+		lastSample = (byte) ((source.getSample()>>(int)(8-bits.getValue()))<<(int)(8-bits.getValue()));
+		return lastSample;
 	}
 
 }

@@ -22,8 +22,9 @@ public class Multiplier extends Source {
 
 	@Override
 	public byte getSample() {
-		return (byte) (control == null ? (source1.getSample() + 128) * (source2.getSample() + 128) / 255 - 128
+		lastSample = (byte) (control == null ? (source1.getSample() + 128) * (source2.getSample() + 128) / 255 - 128
 				: (source1.getSample() + 128) * control.getValue() - 128);
+		return lastSample;
 	}
 
 }
