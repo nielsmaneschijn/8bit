@@ -2,8 +2,6 @@ package net.maneschijn.bleep.ui;
 
 import static net.maneschijn.bleep.core.Util.EXTERNAL_BUFFER_SIZE;
 
-import com.sun.prism.paint.Paint;
-
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

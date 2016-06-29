@@ -1,6 +1,6 @@
 package net.maneschijn.bleep.core;
 
-import static net.maneschijn.bleep.core.Util.*;
+import static net.maneschijn.bleep.core.Util.SAMPLERATE;
 
 public class ADSR extends Source implements Mod {
 // van -128 tot 127!

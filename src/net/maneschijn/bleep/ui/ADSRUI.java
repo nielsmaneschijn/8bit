@@ -1,12 +1,9 @@
 package net.maneschijn.bleep.ui;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import net.maneschijn.bleep.core.ADSR;
 import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Source;
-import net.maneschijn.bleep.core.SourceUI;
 
 public class ADSRUI extends GridPane implements SourceUI {
 

@@ -3,7 +3,6 @@ package net.maneschijn.bleep.ui;
 import javafx.scene.layout.GridPane;
 import net.maneschijn.bleep.core.Mixer;
 import net.maneschijn.bleep.core.Source;
-import net.maneschijn.bleep.core.SourceUI;
 
 public class MixUI extends GridPane implements SourceUI {
 

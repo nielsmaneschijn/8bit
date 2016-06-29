@@ -1,6 +1,8 @@
 package net.maneschijn.bleep.core;
 
-import static net.maneschijn.bleep.core.Util.*;
+import static net.maneschijn.bleep.core.Util.BUFFER_SIZE;
+import static net.maneschijn.bleep.core.Util.EXTERNAL_BUFFER_SIZE;
+import static net.maneschijn.bleep.core.Util.SAMPLERATE;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;

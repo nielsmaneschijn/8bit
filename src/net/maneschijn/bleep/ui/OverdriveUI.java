@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import net.maneschijn.bleep.core.Overdrive;
 import net.maneschijn.bleep.core.Source;
-import net.maneschijn.bleep.core.SourceUI;
 
 public class OverdriveUI extends GridPane implements SourceUI {
 

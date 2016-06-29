@@ -23,7 +23,7 @@ import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Engine;
 import net.maneschijn.bleep.core.Mixer;
-import net.maneschijn.bleep.core.Source;
+import net.maneschijn.bleep.core.Moog;
 
 public class MonoSynthFX extends Application implements Runnable {
 
@@ -151,9 +151,10 @@ public class MonoSynthFX extends Application implements Runnable {
 
 		Mixer mixer = new Mixer(new Control(1),osc1.getSource(), osc2.getSource());
 		OverdriveUI overdrive = new OverdriveUI(mixer);
+		Moog moog = new Moog(overdrive.getSource());
 
 		// controller en engine aanslingeren
-		eng = new Engine(volume.getControl(), overdrive.getSource() );
+		eng = new Engine(volume.getControl(), moog );
 		eng.start();
 		controller.connectToMidiDevice();
 		

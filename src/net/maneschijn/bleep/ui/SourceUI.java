@@ -1,4 +1,6 @@
-package net.maneschijn.bleep.core;
+package net.maneschijn.bleep.ui;
+
+import net.maneschijn.bleep.core.Source;
 
 public interface SourceUI extends javafx.event.EventTarget {
 

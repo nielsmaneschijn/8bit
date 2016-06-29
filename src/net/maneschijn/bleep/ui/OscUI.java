@@ -10,7 +10,6 @@ import net.maneschijn.bleep.core.Router;
 import net.maneschijn.bleep.core.SawOsc;
 import net.maneschijn.bleep.core.SineOsc;
 import net.maneschijn.bleep.core.Source;
-import net.maneschijn.bleep.core.SourceUI;
 import net.maneschijn.bleep.core.SquareOsc;
 import net.maneschijn.bleep.core.TriangleOsc;
 
