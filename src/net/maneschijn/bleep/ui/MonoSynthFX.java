@@ -151,10 +151,10 @@ public class MonoSynthFX extends Application implements Runnable {
 
 		Mixer mixer = new Mixer(new Control(1),osc1.getSource(), osc2.getSource());
 		OverdriveUI overdrive = new OverdriveUI(mixer);
-		Moog moog = new Moog(overdrive.getSource());
+		MoogUI moog = new MoogUI(overdrive.getSource());
 
 		// controller en engine aanslingeren
-		eng = new Engine(volume.getControl(), moog );
+		eng = new Engine(volume.getControl(), moog.getSource() );
 		eng.start();
 		controller.connectToMidiDevice();
 		
@@ -162,6 +162,7 @@ public class MonoSynthFX extends Application implements Runnable {
 		root.add(osc1, 0, 2);
 		root.add(osc2, 1, 2);
 		root.add(overdrive, 2, 2);
+		root.add(moog, 3, 2);
 		root.add(volume, 15, 2);
 		volume.add(vu, 1, 1);
 
