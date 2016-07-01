@@ -166,10 +166,13 @@ public class MonoSynthFX extends Application implements Runnable {
 		root.add(volume, 15, 2);
 		volume.add(vu, 1, 1);
 
-
+		GridPane scopes = new GridPane();
 
 		Scope scope = new Scope(eng);
-		root.add(scope,  1, 1);
+		scopes.add(scope,  1, 1);
+		ScopeFFT scopeFFT = new ScopeFFT(eng);
+		scopes.add(scopeFFT,  2, 1);
+		root.add(scopes,  1, 1);
 		
 		Scene scene = new Scene(root, 1500, 500);
 		stage.setTitle("Borkotron");

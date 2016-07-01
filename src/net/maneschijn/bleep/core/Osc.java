@@ -5,16 +5,21 @@ abstract public class Osc extends Source implements Mod {
 	protected Source lfo;
 	protected Source envelope;
 	protected Control detune;
+	protected Control dutycycle;
 	protected ZeroCrossingDetector zerocross;
 
 	// let op geen pass by value!!
-	public Osc(Controller controller, Source lfo, Source envelope, Control detune) {
+	public Osc(Controller controller, Source lfo, Source envelope, Control detune, Control dutycycle) {
 		super(controller);
 		this.freq = controller.getFreqControl();
 		this.lfo = lfo;
 		this.envelope = envelope;
 		this.detune = detune;
+		this.dutycycle=dutycycle;
 		this.zerocross = new ZeroCrossingDetector();
+	}
+	public Osc(Controller controller, Source lfo, Source envelope, Control detune) {
+		this(controller,lfo,envelope,detune,null);
 	}
 
 	public double getShiftedFreq() {
