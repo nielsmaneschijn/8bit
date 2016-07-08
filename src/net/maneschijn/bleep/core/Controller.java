@@ -17,9 +17,9 @@ import javax.sound.midi.Transmitter;
 
 public class Controller implements Receiver {
 
-	private Control freq;
-	private Control gain;
-	private List<Source> subscribers = new ArrayList<Source>();
+	protected Control freq;
+	protected Control gain;
+	protected List<Source> subscribers = new ArrayList<Source>();
 
 	public Controller(Control freq, Control gain) {
 		this.freq = freq;
@@ -55,7 +55,7 @@ public class Controller implements Receiver {
 			break;
 		case 128:
 			System.out.println("note off");
-			noteOff();
+			noteOff(message);
 			break;
 		case 176:
 			System.out.println("mod");
@@ -74,25 +74,30 @@ public class Controller implements Receiver {
 		}
 	}
 
-	public void noteOff() {
-//		gain.setValue(0);
+	public void noteOff(MidiMessage message) {
+		// gain.setValue(0);
 		for (Source subscriber : subscribers) {
 			System.out.println("subscriber " + subscriber + " note off");
 			subscriber.noteOff();
 		}
 	}
 
-	public void noteOn() {
+	// public void noteOn() {
+	// for (Source subscriber : subscribers) {
+	// System.out.println("subscriber " + subscriber + " note on");
+	// subscriber.noteOn();
+	// }
+	// }
+
+	public void noteOn(MidiMessage message) {
+		if (message != null) {
+			freq.setValue(getFreq(((ShortMessage) message).getData1()));
+			gain.setValue((((ShortMessage) message).getData2()) / 128D);
+		}
 		for (Source subscriber : subscribers) {
 			System.out.println("subscriber " + subscriber + " note on");
 			subscriber.noteOn();
 		}
-	}
-
-	public void noteOn(MidiMessage message) {
-		freq.setValue(getFreq(((ShortMessage) message).getData1()));
-		gain.setValue((((ShortMessage) message).getData2()) / 128D);
-		noteOn();
 	}
 
 	@Override

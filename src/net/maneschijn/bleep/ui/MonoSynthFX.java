@@ -19,11 +19,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import net.maneschijn.bleep.core.Arp;
 import net.maneschijn.bleep.core.Control;
 import net.maneschijn.bleep.core.Controller;
 import net.maneschijn.bleep.core.Engine;
 import net.maneschijn.bleep.core.Mixer;
-import net.maneschijn.bleep.core.Moog;
 
 public class MonoSynthFX extends Application implements Runnable {
 
@@ -39,7 +39,8 @@ public class MonoSynthFX extends Application implements Runnable {
 
 	private Control oscGain = new Control(1.0D);
 	private Control freq = new Control(440D);
-	private Controller controller = new Controller(freq, oscGain);
+	private Controller controller = new Arp(freq, oscGain);
+//	private Controller controller = new Controller(freq, oscGain);
 
 	private Engine eng;
 
@@ -237,14 +238,14 @@ public class MonoSynthFX extends Application implements Runnable {
 		System.out.println("Note on: " + note);
 		freq.setValue(getFreq(transpose + note));
 		oscGain.setValue(1D);
-		controller.noteOn();
+		controller.noteOn(null);
 	}
 
 	private void noteOff(int note) {
 		noteOn = false;
 		System.out.println("Note off: " + note);
 //		oscGain.setValue(0D);
-		controller.noteOff();
+		controller.noteOff(null);
 	}
 
 	@Override
