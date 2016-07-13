@@ -15,9 +15,9 @@ public class Arp extends Controller {
 		super(freq, gain);
 
 		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
+		TimerTask timerTask = new TimerTask() {
 			@Override
-			public void run() {
+			public synchronized void run() { //dit is vast niet zo synchronized als ik hoop
 				if (!it.hasNext()) {
 					it = notes.listIterator();
 
@@ -25,22 +25,22 @@ public class Arp extends Controller {
 				if (it.hasNext()) {
 					freq.setValue(getFreq(it.next()));
 					gain.setValue(1);
-					System.out.println("nuts");
+//					System.out.println("nuts");
 				} else {
-					System.out.println("nonuts");
+//					System.out.println("nonuts");
 					gain.setValue(0);
 
 				}
 			}
-		}, 0, 100);
-
+		};
+		timer.schedule(timerTask, 0, 100);
 	}
 
 	private ArrayList<Integer> notes = new ArrayList<Integer>();
 	private ListIterator<Integer> it = notes.listIterator();
 
 	@Override
-	public void noteOn(MidiMessage message) {
+	public synchronized void noteOn(MidiMessage message) {
 		notes.add((Integer) ((ShortMessage) message).getData1());
 		it = notes.listIterator();
 
@@ -51,7 +51,7 @@ public class Arp extends Controller {
 	}
 
 	@Override
-	public void noteOff(MidiMessage message) {
+	public synchronized void noteOff(MidiMessage message) {
 		notes.remove((Integer) ((ShortMessage) message).getData1());
 		it = notes.listIterator(); //niet helemaal threadsafe...
 	}

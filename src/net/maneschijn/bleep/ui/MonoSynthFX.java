@@ -8,6 +8,10 @@ import static net.maneschijn.bleep.core.Util.getFreq;
 //import java.awt.event.KeyListener;
 import java.util.HashMap;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
+
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -238,14 +242,23 @@ public class MonoSynthFX extends Application implements Runnable {
 		System.out.println("Note on: " + note);
 		freq.setValue(getFreq(transpose + note));
 		oscGain.setValue(1D);
-		controller.noteOn(null);
+		try {
+			controller.noteOn(new ShortMessage(ShortMessage.NOTE_ON, note, 1));
+		} catch (InvalidMidiDataException e) {
+			// waarom zou dit gebeuren??
+			e.printStackTrace();
+		}
 	}
 
 	private void noteOff(int note) {
 		noteOn = false;
 		System.out.println("Note off: " + note);
 //		oscGain.setValue(0D);
-		controller.noteOff(null);
+		try {
+			controller.noteOff(new ShortMessage(ShortMessage.NOTE_OFF, note, 0));
+		} catch (InvalidMidiDataException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

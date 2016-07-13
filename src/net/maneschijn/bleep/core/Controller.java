@@ -47,30 +47,31 @@ public class Controller implements Receiver {
 	public void send(MidiMessage message, long timeStamp) {
 
 		switch ((int) ((ShortMessage) message).getStatus()) {
-		case 144:
+		case ShortMessage.NOTE_ON:
 			System.out.println("note on");
 			System.out.println(((ShortMessage) message).getData1());
 			System.out.println(((ShortMessage) message).getData2());
 			noteOn(message);
 			break;
-		case 128:
+		case ShortMessage.NOTE_OFF:
 			System.out.println("note off");
 			noteOff(message);
 			break;
-		case 176:
-			System.out.println("mod");
+		case ShortMessage.CONTROL_CHANGE:
+			System.out.println("control");
 			System.out.println(((ShortMessage) message).getData1());
 			System.out.println(((ShortMessage) message).getData2());
 			break;
-		case 224:
-			System.out.println("mod");
+		case ShortMessage.PITCH_BEND:
+			System.out.println("pitch");
 			System.out.println(((ShortMessage) message).getData1());
 			System.out.println(((ShortMessage) message).getData2());
 			break;
-		case 254:
+		case ShortMessage.ACTIVE_SENSING:
 			break;
 		default:
-			System.out.println("wut?");
+			//CHANNEL_PRESSURE en POLY_PRESSURE zijn ook leuk (aftertouch)
+			System.out.println("wut? "+ (int) ((ShortMessage) message).getStatus());
 		}
 	}
 
